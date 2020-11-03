@@ -7,7 +7,7 @@ app.use(express.json())
 
 app.post('/publishMessage',  function (request, response)  {
     let message = request.body.message
-    mqtt_publisher.publishMessage(process.env.TOPIC, message, ()=>{
+    mqtt_publisher.publishToBroker(process.env.TOPIC, message, ()=>{
         response.status(200).send({message: 'message sent'})
     })
 
