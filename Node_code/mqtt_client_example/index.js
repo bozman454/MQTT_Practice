@@ -13,6 +13,7 @@ client.on("connect", () => {
     console.log('nodejs client connected')
     client.subscribe(topic);
 })
+
 //does not handle connection url errors
 client.on("error", (error) => {
     console.log("Can't connect" + error)
