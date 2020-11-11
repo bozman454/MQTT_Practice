@@ -1,5 +1,6 @@
 module.exports = {
-    insertSensorData
+    insertSensorData,
+    getAllSensorData
 }
 
 function insertSensorData(client, data, cb){
@@ -11,5 +12,15 @@ function insertSensorData(client, data, cb){
         })
     
     });
+}
+
+function getAllSensorData(client, cb){
+     client.connect(err=>{
+         if(err) throw err;
+         client.db("Garden1").collection("SensorData").find({}).toArray((err,result)=>{
+             if(err) throw err;
+             cb(result)
+         })
+     })
 }
 

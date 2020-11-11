@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
+require('dotenv').config();
 
+const {insertSensorData, getAllSensorData} = require('./database')
 
-const uri = "mongodb+srv://Willem:mieper@gardendata.a5fmw.mongodb.net/Garden1";
+const uri = process.env.MONGO_URI;
+const PORT = process.env.PORT;
 
 
 const client = new MongoClient(uri, {
@@ -12,15 +15,21 @@ const client = new MongoClient(uri, {
 });
 
 
-const db = require('./database')
+
 
 app.use(express.json())
 
 app.post('/insertData',  function (request, response)  {
     let data = request.body
-    db.insertSensorData(client, data, ()=>{
+    insertSensorData(client, data, ()=>{
         response.status(200).send({message: "data inserted"})
     })
 })
 
-app.listen(5000, () => console.log(`server is up at port 5000`))
+app.get('/getAllSensorData', function(request, response){
+    getAllSensorData(client, (result)=>{
+        response.status(200).send({SensorDataArray: result})
+    })
+})
+
+app.listen(PORT, () => console.log(`Garden Management Service running at port `+ PORT))
