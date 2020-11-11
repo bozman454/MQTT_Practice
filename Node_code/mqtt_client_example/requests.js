@@ -4,21 +4,16 @@ module.exports = {
     sendSensorData
 };
 
-const fetch = require('node-fetch')
+const axios = require('axios')
 
 
 function sendSensorData(data) {
     let datetime = new Date();
-    let out = {
-        time: datetime,
-        readings: data
-    }
-    fetch(`http://${process.env.GARDEN_MANAGEMENT}:5000/insertData`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(out)
+    
+    axios.post(`http://${process.env.GARDEN_MANAGEMENT}:5000/insertData`,{
+         time: datetime,
+        readings: data 
     })
-        .then(response => response.json())
         .then(data => {
             console.log('data inserted');
         })

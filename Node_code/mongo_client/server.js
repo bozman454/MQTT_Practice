@@ -13,16 +13,14 @@ const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
-
-
-
-
 app.use(express.json())
 
 app.post('/insertData',  function (request, response)  {
-    console.log(`inserting: `)
-    console.log(request.body)
-    insertSensorData(client, request.body, ()=>{
+    
+    insertSensorData(client, {
+        time: request.body.time,
+        readings : request.body.readings
+    }, ()=>{
         response.status(200).send({message: "data inserted"})
     })
 })

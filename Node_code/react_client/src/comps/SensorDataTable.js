@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
+const fetch = require('node-fetch');
 
-var mqtt = require('mqtt');
-var options = {
-    clientId: 'react'    
-};
-var client  = mqtt.connect('mqtt://192.168.86.85', options);
-
-// preciouschicken.com is the MQTT topic
-client.subscribe('SensorData');
 
 
 export default function SensorDataTable() {
 
+    const [readings, setReadings] = useState([])
+    const [loading, setLoading] = useState(true)
+
     useEffect(() => {
-        console.log('yo')
-        client.on('message', function (topic, message) {
-            console.log(message)
-            client.end();
-            });
-    },[])
+        fetch('http://192.168.86.94:5000/getAllSensorData')
+            .then(response => response.json())
+            .then(readingsarr => {
+                console.log(readingsarr);
+                setLoading(false);
+                setReadings(readingsarr.SensorDataArray)
+            })
+            .catch(err => console.log(err))
+    }, [])
 
-    // const message, setMessage = useState[""]
 
-    return (<p>table </p>)
+    return (<div>{
+        loading ? <p>loading </p> :
+         <div><table><th>AID</th><th>TIME</th><th>humidity</th><th>light</th><th>moisture</th><th>temperature</th>
+             {readings.map((entry)=>{
+                return <tr><td>{entry.readings.aid}</td><td>{entry.time}</td><td>{entry.readings.humidity}</td><td>{entry.readings.light}</td><td>{entry.readings.moisture}</td><td>{entry.readings.temperature}</td></tr>
+             })}</table>
+        </div>}
+    </div>)
 
 
 }

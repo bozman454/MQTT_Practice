@@ -27,7 +27,8 @@ client.on("connect", (connack) => {
 client.on('message', (topic, message, packet) => {
     
     console.log('message arrived')
-    sendSensorData(message)
+    let data = JSON.parse(message)
+    sendSensorData(data)
 
 
 });
