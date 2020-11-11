@@ -1,18 +1,22 @@
-
+require('dotenv').config();
 
 module.exports = {
-    insertSensorData
+    sendSensorData
 };
 
 const fetch = require('node-fetch')
 
 
-function insertSensorData(data) {
-
-    fetch('http://localhost:5000/insertData', {
+function sendSensorData(data) {
+    let datetime = new Date();
+    let out = {
+        time: datetime,
+        readings: data
+    }
+    fetch(`http://${process.env.GARDEN_MANAGEMENT}:5000/insertData`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: data
+        body: JSON.stringify(out)
     })
         .then(response => response.json())
         .then(data => {

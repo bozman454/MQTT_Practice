@@ -20,8 +20,9 @@ const client = new MongoClient(uri, {
 app.use(express.json())
 
 app.post('/insertData',  function (request, response)  {
-    let data = request.body
-    insertSensorData(client, data, ()=>{
+    console.log(`inserting: `)
+    console.log(request.body)
+    insertSensorData(client, request.body, ()=>{
         response.status(200).send({message: "data inserted"})
     })
 })

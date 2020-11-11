@@ -1,5 +1,5 @@
 const mqtt = require('mqtt');
-const { insertSensorData } = require('./requests');
+const { sendSensorData } = require('./requests');
 require('dotenv').config();
 
 
@@ -27,7 +27,7 @@ client.on("connect", (connack) => {
 client.on('message', (topic, message, packet) => {
     
     console.log('message arrived')
-    insertSensorData(message)
+    sendSensorData(message)
 
 
 });
